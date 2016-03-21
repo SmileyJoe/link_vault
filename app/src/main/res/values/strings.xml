@@ -6,4 +6,9 @@
     <string name="hint_title">Title</string>
     <string name="hint_note">Note</string>
     <string name="hint_url">Url</string>
+
+    <string name="action_save">Save</string>
+
+    <string name="error_new_url_save_failed">Something went wrong. Please try again.</string>
+    <string name="error_new_url_save_success">Saved</string>
 </resources>
