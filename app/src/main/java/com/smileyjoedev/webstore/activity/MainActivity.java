@@ -67,7 +67,6 @@ public class MainActivity extends BaseActivity {
             case REQUEST_NEW_URL:
                 if(resultCode == RESULT_OK){
                     populateList();
-                    Toast.makeText(this, R.string.error_new_url_save_success, Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:

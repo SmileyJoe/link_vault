@@ -18,6 +18,12 @@
         </activity>
         <activity android:name=".activity.NewUrlActivity"
             android:label="@string/activity_title_new_url">
+            <intent-filter
+                android:label="@string/share_dialog_title">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
     </application>
 

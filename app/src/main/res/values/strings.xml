@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">WebStore</string>
 
+    <string name="share_dialog_title">@string/app_name</string>
+
     <string name="activity_title_new_url">New</string>
 
     <string name="hint_title">Title</string>

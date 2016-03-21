@@ -18,7 +18,9 @@
                 android:id="@+id/edit_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_title"/>
+                android:inputType="textCapSentences"
+                android:hint="@string/hint_title"
+                android:nextFocusDown="@+id/edit_note"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -29,7 +31,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_note"
-                android:lines="5"/>
+                android:lines="5"
+                android:inputType="textCapSentences|textMultiLine"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -39,7 +42,10 @@
                 android:id="@+id/edit_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_url"/>
+                android:hint="@string/hint_url"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 </LinearLayout>
