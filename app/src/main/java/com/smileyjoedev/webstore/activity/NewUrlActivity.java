@@ -108,6 +108,8 @@ public class NewUrlActivity extends BaseActivity {
         switch (item.getItemId()){
             case android.R.id.home:
                 Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 TaskStackBuilder builder = TaskStackBuilder.create(this)
                         .addNextIntent(mainIntent);
