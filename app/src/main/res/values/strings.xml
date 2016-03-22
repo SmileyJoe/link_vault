@@ -22,4 +22,9 @@
 
     <string name="delete_url_success">Url Deleted</string>
     <string name="delete_url_failed">Something went wrong</string>
+
+    <string name="dialog_confirm_delete">Are you sure you want to delete %1$s</string>
+
+    <string name="text_yes">Yes</string>
+    <string name="text_no">No</string>
 </resources>

@@ -1,10 +1,12 @@
 package com.smileyjoedev.webstore.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -91,14 +93,7 @@ public class ViewUrlActivity extends BaseActivity {
                 startActivityForResult(intent, REQUEST_EDIT_URL);
                 return true;
             case R.id.action_delete:
-                boolean success = mUrl.delete();
-                if(success){
-                    Toast.makeText(getBaseContext(), R.string.delete_url_success, Toast.LENGTH_SHORT).show();
-                    setResult(RESULT_OK);
-                    finish();
-                } else {
-                    Toast.makeText(getBaseContext(), R.string.delete_url_failed, Toast.LENGTH_SHORT).show();
-                }
+                confirmDelete();
                 return true;
             case R.id.action_open:
                 Intent openIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl.getUrl()));
@@ -106,6 +101,25 @@ public class ViewUrlActivity extends BaseActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void confirmDelete(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.dialog_confirm_delete, mUrl.getTitle()))
+                .setPositiveButton(R.string.text_yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        boolean success = mUrl.delete();
+                        if(success){
+                            Toast.makeText(getBaseContext(), R.string.delete_url_success, Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                            finish();
+                        } else {
+                            Toast.makeText(getBaseContext(), R.string.delete_url_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.text_no, null)
+        .show();
     }
 
     @Override
