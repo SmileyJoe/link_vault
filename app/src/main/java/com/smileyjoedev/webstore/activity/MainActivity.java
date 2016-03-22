@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.smileyjoedev.webstore.R;
@@ -24,6 +25,9 @@ public class MainActivity extends BaseActivity {
 
     @Bind(R.id.recycler_url)
     RecyclerView mRecyclerUrl;
+
+    @Bind(R.id.layout_empty)
+    LinearLayout mLayoutEmpty;
 
     private UrlListAdapter mUrlListAdapter;
 
@@ -53,7 +57,7 @@ public class MainActivity extends BaseActivity {
 
     private void populateList(){
         List<Url> items = Url.listAll(Url.class, "M_TITLE ASC");
-        Log.d("Items", "Items size: " + items.size());
+
         if(mUrlListAdapter == null){
             mUrlListAdapter = new UrlListAdapter(items);
             mUrlListAdapter.setListener(new UrlListAdapter.Listener() {
@@ -68,6 +72,16 @@ public class MainActivity extends BaseActivity {
             mUrlListAdapter.setItems(items);
             mUrlListAdapter.notifyDataSetChanged();
         }
+
+        if(items.size() <= 0){
+            mLayoutEmpty.setVisibility(View.VISIBLE);
+            mRecyclerUrl.setVisibility(View.GONE);
+        } else {
+            mLayoutEmpty.setVisibility(View.GONE);
+            mRecyclerUrl.setVisibility(View.VISIBLE);
+        }
+
+
     }
 
     @Override

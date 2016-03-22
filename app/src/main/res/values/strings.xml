@@ -27,4 +27,6 @@
 
     <string name="text_yes">Yes</string>
     <string name="text_no">No</string>
+
+    <string name="text_no_urls">There are no urls. Please add one.</string>
 </resources>
