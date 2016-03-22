@@ -2,6 +2,8 @@ package com.smileyjoedev.webstore.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -44,6 +46,8 @@ public class NewUrlActivity extends BaseActivity {
         setContentView(R.layout.activity_new_url);
         ButterKnife.bind(this);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         handleEditIntent();
         handleShareIntent();
         mEditUrl.setOnEditorActionListener(new OnDoneClick());
@@ -102,6 +106,21 @@ public class NewUrlActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case android.R.id.home:
+                Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
+
+                TaskStackBuilder builder = TaskStackBuilder.create(this)
+                        .addNextIntent(mainIntent);
+
+                if(mIsEdit){
+                    Intent viewIntent = new Intent(getBaseContext(), ViewUrlActivity.class);
+                    viewIntent.putExtra(EXTRA_URL_ID, mUrl.getId());
+                    builder.addNextIntent(viewIntent);
+                }
+
+                builder.startActivities();
+
+                return true;
             case R.id.action_save:
                 save();
                 return true;

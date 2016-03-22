@@ -3,6 +3,7 @@ package com.smileyjoedev.webstore.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +41,8 @@ public class ViewUrlActivity extends BaseActivity {
         setContentView(R.layout.activity_view_url);
         ButterKnife.bind(this);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         handleExtras();
     }
 
@@ -74,6 +77,15 @@ public class ViewUrlActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case android.R.id.home:
+                Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
+
+                TaskStackBuilder builder = TaskStackBuilder.create(this)
+                        .addNextIntent(mainIntent);
+
+                builder.startActivities();
+
+                return true;
             case R.id.action_edit:
                 Intent intent = new Intent(getBaseContext(), NewUrlActivity.class);
                 intent.putExtra(NewUrlActivity.EXTRA_URL_ID, mUrl.getId());
