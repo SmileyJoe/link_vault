@@ -24,6 +24,9 @@ public class Url extends SugarRecord{
     }
 
     public void setUrl(String url) {
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "http://" + url;
+        }
         mUrl = url.trim();
     }
 

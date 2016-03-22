@@ -1,6 +1,7 @@
 package com.smileyjoedev.webstore.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.TaskStackBuilder;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.smileyjoedev.webstore.R;
 import com.smileyjoedev.webstore.object.Url;
@@ -79,18 +81,28 @@ public class ViewUrlActivity extends BaseActivity {
         switch (item.getItemId()){
             case android.R.id.home:
                 Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
-
                 TaskStackBuilder builder = TaskStackBuilder.create(this)
                         .addNextIntent(mainIntent);
-
                 builder.startActivities();
-
                 return true;
             case R.id.action_edit:
                 Intent intent = new Intent(getBaseContext(), NewUrlActivity.class);
                 intent.putExtra(NewUrlActivity.EXTRA_URL_ID, mUrl.getId());
                 startActivityForResult(intent, REQUEST_EDIT_URL);
                 return true;
+            case R.id.action_delete:
+                boolean success = mUrl.delete();
+                if(success){
+                    Toast.makeText(getBaseContext(), R.string.delete_url_success, Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    Toast.makeText(getBaseContext(), R.string.delete_url_failed, Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.action_open:
+                Intent openIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl.getUrl()));
+                startActivity(openIntent);
             default:
                 return super.onOptionsItemSelected(item);
         }
