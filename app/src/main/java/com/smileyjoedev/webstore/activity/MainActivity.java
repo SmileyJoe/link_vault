@@ -28,6 +28,7 @@ public class MainActivity extends BaseActivity {
     private UrlListAdapter mUrlListAdapter;
 
     private static final int REQUEST_NEW_URL = 1;
+    private static final int REQUEST_VIEW_URL = 2;
 
     @OnClick(R.id.fab_new_url) void newUrl(){
         Intent intent = new Intent(this, NewUrlActivity.class);
@@ -55,6 +56,14 @@ public class MainActivity extends BaseActivity {
         Log.d("Items", "Items size: " + items.size());
         if(mUrlListAdapter == null){
             mUrlListAdapter = new UrlListAdapter(items);
+            mUrlListAdapter.setListener(new UrlListAdapter.Listener() {
+                @Override
+                public void onItemClick(Url url) {
+                    Intent intent = new Intent(getBaseContext(), ViewUrlActivity.class);
+                    intent.putExtra(ViewUrlActivity.EXTRA_URL_ID, url.getId());
+                    startActivityForResult(intent, REQUEST_VIEW_URL);
+                }
+            });
         } else {
             mUrlListAdapter.setItems(items);
             mUrlListAdapter.notifyDataSetChanged();
@@ -65,6 +74,11 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case REQUEST_NEW_URL:
+                if(resultCode == RESULT_OK){
+                    populateList();
+                }
+                break;
+            case REQUEST_VIEW_URL:
                 if(resultCode == RESULT_OK){
                     populateList();
                 }

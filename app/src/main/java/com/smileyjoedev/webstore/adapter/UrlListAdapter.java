@@ -1,5 +1,6 @@
 package com.smileyjoedev.webstore.adapter;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import com.facebook.stetho.common.ArrayListAccumulator;
 import com.smileyjoedev.webstore.R;
+import com.smileyjoedev.webstore.activity.ViewUrlActivity;
 import com.smileyjoedev.webstore.object.Url;
 
 import java.util.ArrayList;
@@ -24,8 +26,18 @@ public class UrlListAdapter extends RecyclerView.Adapter<UrlListAdapter.ViewHold
         mItems = items;
     }
 
+    public static interface Listener{
+        public void onItemClick(Url url);
+    }
+
+    private Listener mListener;
+
     public void setItems(List<Url> items) {
         mItems = items;
+    }
+
+    public void setListener(Listener listener) {
+        mListener = listener;
     }
 
     @Override
@@ -36,7 +48,7 @@ public class UrlListAdapter extends RecyclerView.Adapter<UrlListAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.render(getItem(position));
+        holder.render(getItem(position), mListener);
     }
 
     @Override
@@ -48,7 +60,7 @@ public class UrlListAdapter extends RecyclerView.Adapter<UrlListAdapter.ViewHold
         return mItems.get(position);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mTextTitle;
         private TextView mTextNote;
@@ -62,10 +74,19 @@ public class UrlListAdapter extends RecyclerView.Adapter<UrlListAdapter.ViewHold
             mTextUrl = (TextView) itemView.findViewById(R.id.text_url);
         }
 
-        private void render(Url url){
+        private void render(final Url url, final Listener listener){
             mTextUrl.setText(url.getUrl());
             mTextTitle.setText(url.getTitle());
             mTextNote.setText(url.getNote());
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null){
+                        listener.onItemClick(url);
+                    }
+                }
+            });
         }
     }
 }

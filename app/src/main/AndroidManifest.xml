@@ -25,6 +25,8 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.ViewUrlActivity"
+            android:label="@string/activity_title_view_url"></activity>
     </application>
 
 </manifest>

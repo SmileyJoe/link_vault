@@ -24,6 +24,8 @@ import butterknife.ButterKnife;
  */
 public class NewUrlActivity extends BaseActivity {
 
+    public static final String EXTRA_URL_ID = "url_id";
+
     @Bind(R.id.edit_title)
     EditText mEditTitle;
 
@@ -33,14 +35,45 @@ public class NewUrlActivity extends BaseActivity {
     @Bind(R.id.edit_url)
     EditText mEditUrl;
 
+    private boolean mIsEdit = false;
+    private Url mUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_url);
         ButterKnife.bind(this);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        handleEditIntent();
         handleShareIntent();
         mEditUrl.setOnEditorActionListener(new OnDoneClick());
+    }
+
+    private void handleEditIntent(){
+        Intent intent = getIntent();
+
+        if(intent != null){
+            Bundle extras = intent.getExtras();
+
+            if(extras != null){
+                if(extras.containsKey(EXTRA_URL_ID)){
+                    long id = extras.getLong(EXTRA_URL_ID, -1);
+                    mUrl = Url.findById(Url.class, id);
+                    setTitle(R.string.activity_title_edit_url);
+                    populate();
+                    mIsEdit = true;
+                } else {
+                    mUrl = new Url();
+                    mIsEdit = false;
+                }
+            }
+        }
+    }
+
+    private void populate(){
+        mEditUrl.setText(mUrl.getUrl());
+        mEditNote.setText(mUrl.getNote());
+        mEditTitle.setText(mUrl.getTitle());
     }
 
     private void handleShareIntent(){
@@ -82,12 +115,11 @@ public class NewUrlActivity extends BaseActivity {
         String urlString = mEditUrl.getText().toString();
         String note = mEditNote.getText().toString();
 
-        Url url = new Url();
-        url.setTitle(title);
-        url.setNote(note);
-        url.setUrl(urlString);
+        mUrl.setTitle(title);
+        mUrl.setNote(note);
+        mUrl.setUrl(urlString);
 
-        long dbId = url.save();
+        long dbId = mUrl.save();
 
         if(dbId > 0){
             setResult(RESULT_OK);
