@@ -15,8 +15,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.koushikdutta.async.future.Future;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.smileyjoedev.webstore.R;
 import com.smileyjoedev.webstore.object.Url;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,6 +61,7 @@ public class NewUrlActivity extends BaseActivity {
 
     private void handleEditIntent(){
         Intent intent = getIntent();
+        boolean hasUrlId = false;
 
         if(intent != null){
             Bundle extras = intent.getExtras();
@@ -62,15 +69,18 @@ public class NewUrlActivity extends BaseActivity {
             if(extras != null){
                 if(extras.containsKey(EXTRA_URL_ID)){
                     long id = extras.getLong(EXTRA_URL_ID, -1);
+                    hasUrlId = true;
                     mUrl = Url.findById(Url.class, id);
                     setTitle(R.string.activity_title_edit_url);
                     populate();
                     mIsEdit = true;
-                } else {
-                    mUrl = new Url();
-                    mIsEdit = false;
                 }
             }
+        }
+
+        if(!hasUrlId){
+            mUrl = new Url();
+            mIsEdit = false;
         }
     }
 
@@ -145,9 +155,26 @@ public class NewUrlActivity extends BaseActivity {
         if(dbId > 0){
             setResult(RESULT_OK);
             Toast.makeText(this, R.string.error_new_url_save_success, Toast.LENGTH_SHORT).show();
+            Ion.with(getBaseContext()).load(mUrl.getUrl()).asString().setCallback(new UrlRetrieved(mUrl));
             finish();
         } else {
             Toast.makeText(this, R.string.error_new_url_save_failed, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class UrlRetrieved implements FutureCallback<String>{
+
+        private Url mUrl;
+
+        public UrlRetrieved(Url url) {
+            mUrl = url;
+        }
+
+        @Override
+        public void onCompleted(Exception e, String result) {
+            Document doc = Jsoup.parse(result);
+            mUrl.setContent(doc.body().text());
+            mUrl.save();
         }
     }
 

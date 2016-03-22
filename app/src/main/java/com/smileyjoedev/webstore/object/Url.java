@@ -9,7 +9,6 @@ import com.orm.dsl.Unique;
  */
 public class Url extends SugarRecord{
 
-    @Unique
     private String mTitle;
     private String mNote;
     private String mUrl;
