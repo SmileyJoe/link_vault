@@ -3,11 +3,12 @@ package com.smileyjoedev.webstore.object;
 import com.orm.SugarRecord;
 import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
+import com.smileyjoedev.autocomplete.AutoCompleteInterface;
 
 /**
  * Created by cody on 2016/03/21.
  */
-public class Url extends SugarRecord{
+public class Url extends SugarRecord implements AutoCompleteInterface{
 
     private String mTitle;
     private String mNote;
@@ -47,6 +48,11 @@ public class Url extends SugarRecord{
 
     public String getContent() {
         return mContent;
+    }
+
+    @Override
+    public String getAutoCompleteText() {
+        return getTitle() + " " + getNote() + " " + getUrl() + " " + getContent();
     }
 
     @Override

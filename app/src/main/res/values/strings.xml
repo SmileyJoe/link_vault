@@ -29,4 +29,6 @@
     <string name="text_no">No</string>
 
     <string name="text_no_urls">There are no urls. Please add one.</string>
+
+    <string name="hint_search">Search</string>
 </resources>

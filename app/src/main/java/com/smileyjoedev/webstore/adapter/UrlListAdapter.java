@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.stetho.common.ArrayListAccumulator;
+import com.smileyjoedev.autocomplete.AutoCompleteRecyclerAdapter;
 import com.smileyjoedev.webstore.R;
 import com.smileyjoedev.webstore.activity.ViewUrlActivity;
 import com.smileyjoedev.webstore.object.Url;
@@ -18,13 +19,7 @@ import java.util.List;
 /**
  * Created by cody on 2016/03/21.
  */
-public class UrlListAdapter extends RecyclerView.Adapter<UrlListAdapter.ViewHolder> {
-
-    private List<Url> mItems;
-
-    public UrlListAdapter(List<Url> items) {
-        mItems = items;
-    }
+public class UrlListAdapter extends AutoCompleteRecyclerAdapter<UrlListAdapter.ViewHolder, Url> {
 
     public static interface Listener{
         public void onItemClick(Url url);
@@ -32,8 +27,8 @@ public class UrlListAdapter extends RecyclerView.Adapter<UrlListAdapter.ViewHold
 
     private Listener mListener;
 
-    public void setItems(List<Url> items) {
-        mItems = items;
+    public UrlListAdapter(List<Url> items) {
+        super(items);
     }
 
     public void setListener(Listener listener) {
@@ -49,15 +44,6 @@ public class UrlListAdapter extends RecyclerView.Adapter<UrlListAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.render(getItem(position), mListener);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mItems.size();
-    }
-
-    private Url getItem(int position){
-        return mItems.get(position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
