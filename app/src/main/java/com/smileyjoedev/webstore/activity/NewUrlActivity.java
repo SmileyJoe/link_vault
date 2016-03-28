@@ -19,10 +19,13 @@ import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.smileyjoedev.webstore.R;
+import com.smileyjoedev.webstore.general.StringHelper;
 import com.smileyjoedev.webstore.object.Url;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -99,8 +102,15 @@ public class NewUrlActivity extends BaseActivity {
                 if ("text/plain".equals(type)) {
                     String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
 
+                    List<String> urls = StringHelper.getUrls(sharedText);
+                    String url = sharedText;
+
+                    if(!urls.isEmpty()){
+                        url = urls.get(0);
+                    }
+
                     if(!TextUtils.isEmpty(sharedText)){
-                        mEditUrl.setText(sharedText);
+                        mEditUrl.setText(url);
                     }
                 }
             }
