@@ -2,6 +2,7 @@ package com.smileyjoedev.webstore.adapter;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class UrlListAdapter extends AutoCompleteRecyclerAdapter<UrlListAdapter.V
             mTextUrl.setText(url.getUrl());
             mTextTitle.setText(url.getTitle());
             mTextNote.setText(url.getNoteSpannable(itemView.getContext()));
+            mTextNote.setMovementMethod(LinkMovementMethod.getInstance());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

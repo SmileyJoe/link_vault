@@ -28,6 +28,14 @@ import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
 
+    public static final String EXTRA_SEARCH_TEXT = "search_text";
+
+    public static Intent getIntentWithSearch(Context context, String text){
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(EXTRA_SEARCH_TEXT, text);
+        return intent;
+    }
+
     @Bind(R.id.recycler_url)
     RecyclerView mRecyclerUrl;
 
@@ -35,6 +43,7 @@ public class MainActivity extends BaseActivity {
     LinearLayout mLayoutEmpty;
 
     private UrlListAdapter mUrlListAdapter;
+    private SearchView mSearchView;
 
     private static final int REQUEST_NEW_URL = 1;
     private static final int REQUEST_VIEW_URL = 2;
@@ -52,6 +61,30 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         populateList();
         setupRecycler();
+        handleExtras(getIntent());
+    }
+
+    private void handleExtras(Intent intent){
+        Bundle extras = intent.getExtras();
+
+        if(extras != null){
+            if(extras.containsKey(MainActivity.EXTRA_SEARCH_TEXT)){
+                String searchText = extras.getString(MainActivity.EXTRA_SEARCH_TEXT);
+
+                if(mSearchView != null){
+//                    String newQuery = mSearchView.getQuery().toString().trim() + " " + searchText;
+                    mSearchView.setQuery(searchText, true);
+                    mSearchView.setIconified(false);
+                    mSearchView.clearFocus();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleExtras(intent);
     }
 
     private void setupRecycler(){
@@ -95,12 +128,12 @@ public class MainActivity extends BaseActivity {
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
-        SearchView searchView = null;
+        mSearchView = null;
         if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
+            mSearchView = (SearchView) searchItem.getActionView();
         }
-        if (searchView != null) {
-            searchView.setOnQueryTextListener(new SearchTextWatcher());
+        if (mSearchView != null) {
+            mSearchView.setOnQueryTextListener(new SearchTextWatcher());
         }
 
         return super.onCreateOptionsMenu(menu);

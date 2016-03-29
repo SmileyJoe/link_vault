@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -70,6 +71,7 @@ public class ViewUrlActivity extends BaseActivity {
 
     private void populate(){
         mTextNote.setText(mUrl.getNoteSpannable(getBaseContext()));
+        mTextNote.setMovementMethod(LinkMovementMethod.getInstance());
 
         mTextUrl.setText(mUrl.getUrl());
 
