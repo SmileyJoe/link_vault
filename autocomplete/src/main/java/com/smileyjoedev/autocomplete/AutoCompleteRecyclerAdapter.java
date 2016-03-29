@@ -86,10 +86,16 @@ public abstract class AutoCompleteRecyclerAdapter<T extends RecyclerView.ViewHol
                     if (text.contains(prefixString)) {
                         newValues.add(item);
                     } else {
-                        for(String word:hashTags){
-                            if(text.contains(word)){
+                        if(words != null && words.length != 0) {
+                            boolean contains = true;
+                            for (String word : hashTags) {
+                                if (!text.contains(word)) {
+                                    contains = false;
+                                    break;
+                                }
+                            }
+                            if (contains) {
                                 newValues.add(item);
-                                break;
                             }
                         }
                     }
