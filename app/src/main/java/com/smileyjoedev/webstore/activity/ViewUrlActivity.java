@@ -69,7 +69,7 @@ public class ViewUrlActivity extends BaseActivity {
     }
 
     private void populate(){
-        mTextNote.setText(mUrl.getNote());
+        mTextNote.setText(mUrl.getNoteSpannable(getBaseContext()));
 
         mTextUrl.setText(mUrl.getUrl());
 

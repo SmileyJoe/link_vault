@@ -63,7 +63,7 @@ public class UrlListAdapter extends AutoCompleteRecyclerAdapter<UrlListAdapter.V
         private void render(final Url url, final Listener listener){
             mTextUrl.setText(url.getUrl());
             mTextTitle.setText(url.getTitle());
-            mTextNote.setText(url.getNote());
+            mTextNote.setText(url.getNoteSpannable(itemView.getContext()));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

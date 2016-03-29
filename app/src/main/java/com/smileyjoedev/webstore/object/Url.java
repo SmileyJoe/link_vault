@@ -1,14 +1,23 @@
 package com.smileyjoedev.webstore.object;
 
+import android.content.Context;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Table;
 import com.orm.dsl.Unique;
 import com.smileyjoedev.autocomplete.AutoCompleteInterface;
+import com.smileyjoedev.webstore.R;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by cody on 2016/03/21.
  */
-public class Url extends SugarRecord implements AutoCompleteInterface{
+public class Url extends SugarRecord implements AutoCompleteInterface {
 
     private String mTitle;
     private String mNote;
@@ -42,6 +51,34 @@ public class Url extends SugarRecord implements AutoCompleteInterface{
         return mNote;
     }
 
+    public SpannableString getNoteSpannable(Context context) {
+        String text = getNote();
+        String patternStr = "#\\w+";
+        Pattern pattern = Pattern.compile(patternStr);
+
+        SpannableString span = new SpannableString(text);
+
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            String title = matcher.group();
+            String first = title.substring(0, 1);
+            title = title.substring(1, title.length());
+
+            int start = matcher.start();
+            int end = matcher.end();
+
+            if (first.equals("#")) {
+                span.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorPrimary)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            }
+        }
+
+        return span;
+
+
+    }
+
     public String getUrl() {
         return mUrl;
     }
@@ -50,7 +87,7 @@ public class Url extends SugarRecord implements AutoCompleteInterface{
         return mContent;
     }
 
-    public String getShareText(){
+    public String getShareText() {
         return getNote() + " " + getUrl();
     }
 
