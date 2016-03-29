@@ -66,19 +66,35 @@ public class Url extends SugarRecord implements AutoCompleteInterface {
 
         while (matcher.find()) {
             String title = matcher.group();
-            String first = title.substring(0, 1);
-//            title = title.substring(1, title.length());
 
             int start = matcher.start();
             int end = matcher.end();
 
-            if (first.equals("#")) {
-                span.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorPrimary)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                span.setSpan(new OnHashClick(context, title), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            }
+            span.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorPrimary)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new OnHashClick(context, title), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         return span;
+    }
+
+    @Override
+    public long save() {
+        long dbId = super.save();
+
+        String text = getNote();
+        String patternStr = "#\\w+";
+        Pattern pattern = Pattern.compile(patternStr);
+
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            String title = matcher.group();
+
+            HashTag hash = new HashTag(title);
+            hash.save();
+        }
+
+        return dbId;
     }
 
     public String getUrl() {
@@ -108,7 +124,7 @@ public class Url extends SugarRecord implements AutoCompleteInterface {
                 '}';
     }
 
-    private class OnHashClick extends ClickableSpan{
+    private class OnHashClick extends ClickableSpan {
 
         private String mHash;
         private Context mContext;
@@ -121,7 +137,7 @@ public class Url extends SugarRecord implements AutoCompleteInterface {
         @Override
         public void onClick(View widget) {
             Intent intent = MainActivity.getIntentWithSearch(mContext, mHash);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             mContext.startActivity(intent);
         }
     }
