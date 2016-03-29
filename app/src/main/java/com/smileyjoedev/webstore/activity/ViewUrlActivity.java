@@ -105,6 +105,14 @@ public class ViewUrlActivity extends BaseActivity {
                 return true;
             case R.id.action_open:
                 open();
+                return true;
+            case R.id.action_share:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, mUrl.getShareText());
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

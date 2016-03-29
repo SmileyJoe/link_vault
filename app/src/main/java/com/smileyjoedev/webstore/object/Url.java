@@ -50,6 +50,10 @@ public class Url extends SugarRecord implements AutoCompleteInterface{
         return mContent;
     }
 
+    public String getShareText(){
+        return getNote() + " " + getUrl();
+    }
+
     @Override
     public String getAutoCompleteText() {
         return getTitle() + " " + getNote() + " " + getUrl() + " " + getContent();
