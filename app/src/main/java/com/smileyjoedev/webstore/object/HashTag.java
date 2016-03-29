@@ -11,6 +11,9 @@ public class HashTag extends SugarRecord {
     @Unique
     private String mText;
 
+    public HashTag() {
+    }
+
     public HashTag(String text) {
         mText = text;
     }

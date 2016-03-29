@@ -65,6 +65,15 @@ public abstract class AutoCompleteRecyclerAdapter<T extends RecyclerView.ViewHol
                 results.count = list.size();
             } else {
                 final String prefixString = prefix.toString();
+                String[] words = prefixString.split(" ");
+                List<String> hashTags = new ArrayList<>();
+
+                for(String word:words){
+                    word = word.trim();
+                    if(word.startsWith("#")){
+                        hashTags.add(word);
+                    }
+                }
 
                 List<U> values = mOriginalItems;
                 int count = values.size();
@@ -76,6 +85,13 @@ public abstract class AutoCompleteRecyclerAdapter<T extends RecyclerView.ViewHol
                     String text = item.getAutoCompleteText();
                     if (text.contains(prefixString)) {
                         newValues.add(item);
+                    } else {
+                        for(String word:hashTags){
+                            if(text.contains(word)){
+                                newValues.add(item);
+                                break;
+                            }
+                        }
                     }
 
                 }

@@ -32,4 +32,7 @@
     <string name="text_no_urls">There are no urls. Please add one.</string>
 
     <string name="hint_search">Search</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 </resources>

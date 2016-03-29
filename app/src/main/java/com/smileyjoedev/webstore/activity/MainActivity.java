@@ -1,8 +1,13 @@
 package com.smileyjoedev.webstore.activity;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.StringRes;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +23,7 @@ import android.widget.Toast;
 
 import com.smileyjoedev.webstore.R;
 import com.smileyjoedev.webstore.adapter.UrlListAdapter;
+import com.smileyjoedev.webstore.object.HashTag;
 import com.smileyjoedev.webstore.object.Url;
 
 import java.util.List;
@@ -26,7 +32,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     public static final String EXTRA_SEARCH_TEXT = "search_text";
 
@@ -44,6 +50,7 @@ public class MainActivity extends BaseActivity {
 
     private UrlListAdapter mUrlListAdapter;
     private SearchView mSearchView;
+    private DrawerLayout mDrawerMain;
 
     private static final int REQUEST_NEW_URL = 1;
     private static final int REQUEST_VIEW_URL = 2;
@@ -57,11 +64,40 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupNavigation();
         ButterKnife.bind(this);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         populateList();
         setupRecycler();
         handleExtras(getIntent());
+    }
+
+    private void setupNavigation(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        NavigationView navigationMain = (NavigationView) findViewById(R.id.navigation_main);
+        navigationMain.setNavigationItemSelectedListener(this);
+
+        mDrawerMain = (DrawerLayout) findViewById(R.id.drawer_main);
+        DrawerToggle drawerToggle = new DrawerToggle(this, mDrawerMain, toolbar, R.string.drawer_open, R.string.drawer_close);
+        mDrawerMain.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+
+        Menu menuNav = navigationMain.getMenu();
+
+        List<HashTag> tags = HashTag.listAll(HashTag.class, "M_TEXT ASC");
+
+        for(HashTag tag:tags){
+            menuNav.add(tag.getText());
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        mDrawerMain.closeDrawers();
+        setQuery(item.getTitle().toString());
+        return true;
     }
 
     private void handleExtras(Intent intent){
@@ -72,13 +108,17 @@ public class MainActivity extends BaseActivity {
                 String searchText = extras.getString(MainActivity.EXTRA_SEARCH_TEXT);
 
                 if(mSearchView != null){
-//                    String newQuery = mSearchView.getQuery().toString().trim() + " " + searchText;
-                    mSearchView.setQuery(searchText, true);
-                    mSearchView.setIconified(false);
-                    mSearchView.clearFocus();
+                    setQuery(searchText);
                 }
             }
         }
+    }
+
+    private void setQuery(String query){
+        String newQuery = mSearchView.getQuery().toString().trim() + " " + query;
+        mSearchView.setQuery(newQuery, true);
+        mSearchView.setIconified(false);
+        mSearchView.clearFocus();
     }
 
     @Override
@@ -167,6 +207,26 @@ public class MainActivity extends BaseActivity {
         public boolean onQueryTextChange(String newText) {
             mUrlListAdapter.getFilter().filter(newText);
             return false;
+        }
+    }
+
+    private class DrawerToggle extends ActionBarDrawerToggle {
+        public DrawerToggle(Activity activity, DrawerLayout drawerLayout, @StringRes int openDrawerContentDescRes, @StringRes int closeDrawerContentDescRes) {
+            super(activity, drawerLayout, openDrawerContentDescRes, closeDrawerContentDescRes);
+        }
+
+        public DrawerToggle(Activity activity, DrawerLayout drawerLayout, Toolbar toolbar, @StringRes int openDrawerContentDescRes, @StringRes int closeDrawerContentDescRes) {
+            super(activity, drawerLayout, toolbar, openDrawerContentDescRes, closeDrawerContentDescRes);
+        }
+
+        @Override
+        public void onDrawerClosed(View drawerView) {
+            super.onDrawerClosed(drawerView);
+        }
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+            super.onDrawerOpened(drawerView);
         }
     }
 }
