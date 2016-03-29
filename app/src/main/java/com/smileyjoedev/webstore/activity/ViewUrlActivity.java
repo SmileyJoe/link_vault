@@ -18,6 +18,7 @@ import com.smileyjoedev.webstore.object.Url;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by cody on 2016/03/22.
@@ -27,14 +28,15 @@ public class ViewUrlActivity extends BaseActivity {
     public static final String EXTRA_URL_ID = "url_id";
     public static final int REQUEST_EDIT_URL = 1;
 
-    @Bind(R.id.text_title)
-    TextView mTextTitle;
-
     @Bind(R.id.text_note)
     TextView mTextNote;
 
     @Bind(R.id.text_url)
     TextView mTextUrl;
+
+    @OnClick(R.id.text_url) void urlClick(){
+        open();
+    }
 
     private Url mUrl;
     private boolean mHasEdit = false;
@@ -68,8 +70,11 @@ public class ViewUrlActivity extends BaseActivity {
 
     private void populate(){
         mTextNote.setText(mUrl.getNote());
-        mTextTitle.setText(mUrl.getTitle());
+
         mTextUrl.setText(mUrl.getUrl());
+
+        getSupportActionBar().setTitle(mUrl.getTitle());
+        getSupportActionBar().setSubtitle(mUrl.getUrl());
     }
 
     @Override
@@ -99,11 +104,15 @@ public class ViewUrlActivity extends BaseActivity {
                 confirmDelete();
                 return true;
             case R.id.action_open:
-                Intent openIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl.getUrl()));
-                startActivity(openIntent);
+                open();
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void open(){
+        Intent openIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mUrl.getUrl()));
+        startActivity(openIntent);
     }
 
     private void confirmDelete(){

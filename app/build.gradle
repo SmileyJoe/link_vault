@@ -8,8 +8,8 @@ android {
         applicationId "com.smileyjoedev.webstore"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 12
-        versionName "0.1.0"
+        versionCode 15
+        versionName "0.2.0"
     }
     buildTypes {
         release {
